@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+<title>RFID</title>
+	<meta charset="utf-8">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+	<link href='https://cdn.luigifreitas.me/animate.css' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.1/socket.io.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.16/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.16/addons/p5.dom.min.js"></script>
+	<style>
+		body {
+			left: 0%;
+			top: 0%;
+			width: 100%;
+			height: 100%;
+			overflow:hidden;
+			position: absolute;
+			background-color: #ededed;
+		}
+		.box {
+			position: absolute;
+			width: 35%;
+			left: 30%;
+			top: 20%;
+			background-color: black;
+
+			padding-left: 0%;
+			border-radius: 8px;
+			background-color: white;
+			border: 1px solid #b6b6b6;
+
+			box-shadow: 0px 1px 0px .5px #b6b6b6;
+		}
+		.box:after {
+			padding-top: 80%;
+			display: block;
+			content: '';
+		}
+		.help {
+			width: 100%;
+			height: 50%;
+			color: #606060;
+			font-family: "Open Sans";
+			font-weight: 600;
+			font-size: 25px;
+			position: absolute;
+			bottom: -27%;
+			text-align: center;
+			-webkit-transitio: all 0.5s ease;
+			-moz-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+		}
+		.icon {
+			width: 100%;
+			height: 76%;
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+			background-size: 50%;
+			position: absolute;
+			background-image: url("/rfid.png");
+			-webkit-transitio: all 0.5s ease;
+			-moz-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+		}
+
+		.one {
+			-webkit-filter: hue-rotate(300deg);
+		}
+	</style>
+
+
+	<body>
+		<h4></h4>
+		<div class="box">
+			<div class="icon"></div>
+			<div class="help">
+				SCAN YOUR RFID PASSPORT FOR IMMIGRATION CHECK
+			</div>
+		</div>
+	</body>
+
+
+	<script>
+		var label, serverResponse;	// UI elements
+		
+		function setup() {			
+			label = createSpan("Volume:");	// the label 
+			label.position(10,20);				// position it
+			serverResponse = createSpan();	// create a div for server responses
+			serverResponse.position(label.width + 15, 20);		// position it
+			getData(3);								// make a request back to the server
+		}
+		
+		// this function makes a call to the server:
+  		function getData(channel) {
+  			httpGet('/device/' + channel, update);
+  		}
+  		
+  		// update the page when the server responds:
+  		function update(data) {
+
+  			serverResponse.html(data);	
+  			$(".icon").addClass('one');
+		$(".help").text(data);
+		setTimeout(function() {
+			$(".icon").removeClass('one');
+			$(".help").text("Scan your RFID PASSPORT FOR IMMIGRATION CHECK");
+		}, 2500);
+	  		
+
+	  		//serverResponse.html(data);		// put the response in the span
+	  		getData(3);							// make another call to the server
+  		}
+  		
+ 		</script>
+	</head>
+	<body>
+	</body>
+</html>
